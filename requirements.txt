@@ -1,0 +1,20 @@
+# Core Django
+Django==5.0.2
+django-environ==0.11.2
+
+# Database
+psycopg2-binary==2.9.9
+
+# Image Processing & AI
+Pillow==10.2.0
+deepface==0.0.92
+tf-keras==2.16.0
+opencv-python==4.9.0.80
+retina-face==0.0.17
+
+# Vector Database
+chromadb==1.5.0
+
+# Utils
+numpy==1.26.4
+scikit-learn==1.4.1.post1
