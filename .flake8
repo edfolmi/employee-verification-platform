@@ -1,0 +1,17 @@
+[flake8]
+max-line-length = 120
+exclude =
+    migrations,
+    venv,
+    staticfiles,
+    .git,
+    __pycache__
+per-file-ignores =
+    # Allow star imports in __init__ files
+    __init__.py:F401
+ignore =
+    # Allow long lines in migrations
+    E501
+extend-ignore =
+    # Allow blank line to contain whitespace
+    W293
