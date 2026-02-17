@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Employee - Employee Verification Platform{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-person-plus"></i> Add New Employee
+                </h3>
+            </div>
+            <div class="card-body">
+                <!-- Info Alert -->
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Important:</strong> Please provide a clear, front-facing photo of the employee. 
+                    The image must contain exactly one face for facial recognition processing.
+                </div>
+
+                <!-- Form -->
+                <form method="post" enctype="multipart/form-data" id="employeeForm">
+                    {% csrf_token %}
+                    
+                    <!-- Personal Information Section -->
+                    <h5 class="mb-3">
+                        <i class="bi bi-person"></i> Personal Information
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.full_name.id_for_label }}" class="form-label">
+                                Full Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.full_name }}
+                            {% if form.full_name.errors %}
+                                <div class="text-danger small">{{ form.full_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.phone.id_for_label }}" class="form-label">
+                                Phone <span class="text-danger">*</span>
+                            </label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="text-danger small">{{ form.phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                            Email <span class="text-danger">*</span>
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger small">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Employment Details Section -->
+                    <h5 class="mb-3">
+                        <i class="bi bi-building"></i> Employment Details
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.employer_name.id_for_label }}" class="form-label">
+                                Employer Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.employer_name }}
+                            {% if form.employer_name.errors %}
+                                <div class="text-danger small">{{ form.employer_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.position.id_for_label }}" class="form-label">
+                                Position <span class="text-danger">*</span>
+                            </label>
+                            {{ form.position }}
+                            {% if form.position.errors %}
+                                <div class="text-danger small">{{ form.position.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.reputation_score.id_for_label }}" class="form-label">
+                            Reputation Score (0-10) <span class="text-danger">*</span>
+                        </label>
+                        {{ form.reputation_score }}
+                        <small class="form-text text-muted">
+                            Enter a score from 0.0 to 10.0 (e.g., 7.5)
+                        </small>
+                        {% if form.reputation_score.errors %}
+                            <div class="text-danger small">{{ form.reputation_score.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.notes.id_for_label }}" class="form-label">
+                            Notes
+                        </label>
+                        {{ form.notes }}
+                        {% if form.notes.errors %}
+                            <div class="text-danger small">{{ form.notes.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Photo Upload Section -->
+                    <h5 class="mb-3">
+                        <i class="bi bi-camera"></i> Employee Photo
+                    </h5>
+                    <div class="mb-3">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">
+                            Upload Photo <span class="text-danger">*</span>
+                        </label>
+                        {{ form.image }}
+                        <small class="form-text text-muted d-block">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Required: Clear, front-facing photo with exactly one face. Max 5MB.
+                        </small>
+                        {% if form.image.errors %}
+                            <div class="text-danger small">{{ form.image.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Preview Area -->
+                    <div class="mb-3">
+                        <div id="imagePreview" class="d-none">
+                            <label class="form-label">Preview:</label>
+                            <div class="border rounded p-2">
+                                <img id="previewImg" src="" alt="Preview" class="img-fluid" style="max-height: 300px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Submit Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'home' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                            <i class="bi bi-check-circle"></i> Add Employee
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Processing Note -->
+        <div class="alert alert-warning mt-3" role="alert">
+            <i class="bi bi-hourglass-split"></i>
+            <strong>Note:</strong> Processing facial recognition data may take a few moments. 
+            Please do not close or refresh the page after submission.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Image preview
+    document.getElementById('{{ form.image.id_for_label }}').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').classList.remove('d-none');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Form submission handling
+    document.getElementById('employeeForm').addEventListener('submit', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+    });
+</script>
+{% endblock %}

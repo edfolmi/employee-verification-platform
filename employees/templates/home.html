@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Employee Verification Platform{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-3">
+                <i class="bi bi-shield-check text-primary"></i>
+                Employee Verification Platform
+            </h1>
+            <p class="lead text-muted">
+                Advanced facial recognition system for employee verification using AI-powered matching
+            </p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-5">
+            <div class="col-md-6 mb-3">
+                <div class="card border-primary">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+                        <h2 class="card-title mt-3">{{ employee_count }}</h2>
+                        <p class="card-text text-muted">Registered Employees</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card border-success">
+                    <div class="card-body text-center">
+                        <i class="bi bi-database-fill text-success" style="font-size: 3rem;"></i>
+                        <h2 class="card-title mt-3">{{ chroma_stats.total_embeddings }}</h2>
+                        <p class="card-text text-muted">Facial Embeddings Stored</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-person-plus-fill text-primary" style="font-size: 4rem;"></i>
+                        <h3 class="card-title mt-3">Add Employee</h3>
+                        <p class="card-text text-muted">
+                            Register a new employee with facial recognition data
+                        </p>
+                        <a href="{% url 'add_employee' %}" class="btn btn-primary btn-lg mt-3">
+                            <i class="bi bi-plus-circle"></i> Add New Employee
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-camera-fill text-success" style="font-size: 4rem;"></i>
+                        <h3 class="card-title mt-3">Verify Employee</h3>
+                        <p class="card-text text-muted">
+                            Upload a photo to verify employee identity
+                        </p>
+                        <a href="{% url 'verify_employee' %}" class="btn btn-success btn-lg mt-3">
+                            <i class="bi bi-search"></i> Verify Identity
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="card mt-5 bg-light">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-info-circle"></i> How It Works
+                </h5>
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="bi bi-1-circle-fill text-primary" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">Register</h6>
+                            <small class="text-muted">Add employee details and photo</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="bi bi-2-circle-fill text-primary" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">Process</h6>
+                            <small class="text-muted">AI extracts facial features</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="bi bi-3-circle-fill text-primary" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">Verify</h6>
+                            <small class="text-muted">Match faces instantly</small>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-lock"></i>
+                        Powered by DeepFace ArcFace model with {{ chroma_stats.collection_name }} vector database
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

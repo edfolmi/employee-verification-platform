@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Employee - Employee Verification Platform{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-camera"></i> Verify Employee Identity
+                </h3>
+            </div>
+            <div class="card-body">
+                <!-- Info Alert -->
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>How it works:</strong> Upload a photo and our AI will match it against 
+                    registered employees using advanced facial recognition technology.
+                </div>
+
+                <!-- Instructions Card -->
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="bi bi-list-check"></i> Photo Guidelines:
+                        </h6>
+                        <ul class="mb-0">
+                            <li>Ensure the face is clearly visible and well-lit</li>
+                            <li>Photo should contain only one person</li>
+                            <li>Front-facing angle works best</li>
+                            <li>Supported formats: JPEG, PNG, WebP (Max 5MB)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Verification Form -->
+                <form method="post" enctype="multipart/form-data" id="verificationForm">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">
+                            <i class="bi bi-upload"></i> Upload Photo for Verification
+                        </label>
+                        {{ form.image }}
+                        {% if form.image.errors %}
+                            <div class="text-danger small mt-2">{{ form.image.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted d-block mt-2">
+                            Upload a clear photo of the person you want to verify
+                        </small>
+                    </div>
+
+                    <!-- Preview Area -->
+                    <div class="mb-4">
+                        <div id="imagePreview" class="d-none">
+                            <label class="form-label">Preview:</label>
+                            <div class="border rounded p-3 text-center bg-light">
+                                <img id="previewImg" src="" alt="Preview" class="img-fluid rounded" style="max-height: 400px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'home' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                            <i class="bi bi-search"></i> Verify Identity
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Technical Info -->
+                <div class="mt-4 p-3 bg-light rounded">
+                    <small class="text-muted">
+                        <i class="bi bi-cpu"></i>
+                        <strong>Technology:</strong> This system uses DeepFace with ArcFace model 
+                        and cosine similarity matching to identify employees with high accuracy.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Processing Alert -->
+        <div class="alert alert-warning mt-3" role="alert">
+            <i class="bi bi-hourglass-split"></i>
+            <strong>Processing Time:</strong> Facial recognition analysis may take a few seconds. 
+            Please wait for the results.
+        </div>
+
+        <!-- Example Results Info -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <i class="bi bi-question-circle"></i> What to Expect:
+                </h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded mb-2 bg-success bg-opacity-10">
+                            <strong class="text-success">
+                                <i class="bi bi-check-circle"></i> Match Found
+                            </strong>
+                            <p class="small mb-0 mt-2">
+                                If a match is found, you'll see the employee's complete profile 
+                                including their reputation score and contact details.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded mb-2 bg-danger bg-opacity-10">
+                            <strong class="text-danger">
+                                <i class="bi bi-x-circle"></i> No Match
+                            </strong>
+                            <p class="small mb-0 mt-2">
+                                If no match is found or confidence is too low, you'll be notified 
+                                that the person is not in the database.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Image preview
+    document.getElementById('{{ form.image.id_for_label }}').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').classList.remove('d-none');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('imagePreview').classList.add('d-none');
+        }
+    });
+
+    // Form submission handling
+    document.getElementById('verificationForm').addEventListener('submit', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Analyzing...';
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee List - Employee Verification Platform{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-list-ul"></i> All Registered Employees
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if employees %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Full Name</th>
+                                    <th>Employer</th>
+                                    <th>Position</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Reputation</th>
+                                    <th>Registered</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for employee in employees %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ employee.image.url }}" 
+                                             alt="{{ employee.full_name }}" 
+                                             class="rounded"
+                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                    </td>
+                                    <td class="fw-bold">{{ employee.full_name }}</td>
+                                    <td>{{ employee.employer_name }}</td>
+                                    <td>{{ employee.position }}</td>
+                                    <td>
+                                        <a href="mailto:{{ employee.email }}" class="text-decoration-none">
+                                            {{ employee.email }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="tel:{{ employee.phone }}" class="text-decoration-none">
+                                            {{ employee.phone }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ employee.get_reputation_color }}">
+                                            {{ employee.reputation_score|floatformat:1 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>{{ employee.created_at|date:"M d, Y" }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                        <h4 class="mt-3 text-muted">No Employees Registered</h4>
+                        <p class="text-muted">Start by adding your first employee to the system.</p>
+                        <a href="{% url 'add_employee' %}" class="btn btn-primary mt-3">
+                            <i class="bi bi-person-plus"></i> Add First Employee
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">
+                        Total: <strong>{{ employees|length }}</strong> employee{{ employees|length|pluralize }}
+                    </span>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
