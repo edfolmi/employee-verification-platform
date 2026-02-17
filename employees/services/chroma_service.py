@@ -6,7 +6,6 @@ import logging
 from typing import Optional, List, Dict, Any
 import chromadb
 from django.conf import settings
-import os
 
 logger = logging.getLogger(__name__)
 

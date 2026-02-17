@@ -4,7 +4,7 @@ Face recognition service using DeepFace with ArcFace model.
 import os
 import logging
 import numpy as np
-from typing import Optional, List, Dict, Any
+from typing import List, Dict, Any
 from deepface import DeepFace
 from sklearn.preprocessing import normalize
 from django.conf import settings
